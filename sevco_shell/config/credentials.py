@@ -1,9 +1,8 @@
 import argparse
 import os
 import time
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import jwt
 import toml
@@ -139,7 +138,6 @@ class BearerToken:
         return True
 
 
-@dataclass
 class ApiCredentials:
     def __init__(self, provider: CredentialsProvider):
         self.provider = provider
