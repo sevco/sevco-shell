@@ -118,6 +118,9 @@ class BearerToken:
     def expired(self) -> bool:
         return time.time() > self.jwt()['exp'] + (5 * 60)
 
+    def validate(self) -> bool:
+        return self.validate_token(self.token)
+
     @staticmethod
     def validate_token(token: str) -> bool:
         if not token.startswith('Bearer '):
@@ -172,7 +175,14 @@ class ApiCredentials:
                 self._bearer_token = BearerToken(auth_token)
 
         # If we still don't have a token yet ask the user to provide one
-        if not self._bearer_token:
+        if not self._bearer_token or not BearerToken.validate_token(self._bearer_token.token):
+            self._bearer_token = self.auth_token_from_user()
+
+            if Builder.get_yes_no("Save API Token to ~/.sevco/credentials?", default_yes=True):
+                self.persist(auth_token=self._bearer_token.token)
+
+        # Make sure any existing tokens are still valid
+        if not self._bearer_token.validate():
             self._bearer_token = self.auth_token_from_user()
 
             if Builder.get_yes_no("Save API Token to ~/.sevco/credentials?", default_yes=True):
