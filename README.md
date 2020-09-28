@@ -11,7 +11,7 @@ python --version
 ```
 
 # Configuraion
-Credentials will be pulled from cli args (--api-host, --api-key), environment vars (SVSH\_API\_HOST, SVSH\_API\_KEY),
+Credentials will be pulled from cli args (--api-host, --api-key), environment vars (SVSH\_API\_HOST, SVSH\_AUTH\_TOKEN),
 and ~/.sevco/credentials in that order.
 
 Example ~/.sevco/credentials
@@ -46,5 +46,5 @@ api_host = "https://dev.api.sevcolabs.com"
 auth_token = "Bearer sfkjsdfklghsdklfgjhsdfklgjhdfklgjhsdf"
 ```
 
-Credentials can be pass on to the cli (--api-host, --api-key), set as environment vars (SVSH_API_HOST, SVSH_API_KEY), or defined in ~/.sevco/credentials.
+Credentials can be pass on to the cli (--api-host, --auth-token), set as environment vars (SVSH\_API\_HOST, SVSH\_AUTH\_TOKEN), or defined in ~/.sevco/credentials.
 The `svsh` reads credentials in the above order.
