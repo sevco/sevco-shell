@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "sevco-shell"
+version = "0.1.0"
+description = ""
+authors = ["Sevco <support@sevco.io>"]
+
+[tool.poetry.scripts]
+darb-cli = 'darb.main:run'
+
+[tool.poetry.dependencies]
+python = "3.6.12"
+
+requests = { version = "^2.24.0" }
+colorama = "^0.4.3"
+toml = "^0.10.1"
+dacite = "^1.5.1"
+python-dateutil = "^2.8.1"
+PyJWT = "^1.7.1"
+
+
+[tool.poetry.dev-dependencies]
+autopep8 = "*"
+pylint = "*"
+
+[build-system]
+requires = ["poetry_core>=1.0.0a8"]
+build-backend = "poetry.core.masonry.api"
