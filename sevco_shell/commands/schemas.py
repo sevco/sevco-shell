@@ -41,7 +41,7 @@ def SchemasCmd(config: Config, source: Source):
 
         @builder.cmd(permissions=['admin:schema:read', 'schema:read'])
         def do_info(self, idx):
-            '''retreive schema details'''
+            '''retrieve schema details'''
             selected: SourceSchemas = self.get_thing_by_index(self.arg_as_idx(idx))
             pprint(selected.as_dict())
 
