@@ -19,7 +19,7 @@ pip3 --version
 
 Sevco Shell uses Python setuptools for packaging. 
 
-You can install using pip3 From the source root:
+You can install using pip3 from the source root:
 ```
 pip3 install .
 ```
