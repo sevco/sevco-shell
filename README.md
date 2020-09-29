@@ -3,7 +3,7 @@ You can interact with the Sevco platform using our command line tool
 
 # Dependencies
 
--Python 3.7+
+- Python 3.7+
 You must have Python 3.7 or later to install the Sevco Shell
 Check your installed python version by running
 ```
