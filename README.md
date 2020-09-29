@@ -3,43 +3,52 @@ You can interact with the Sevco platform using our command line tool
 
 # Dependencies
 
-Python 3.7+
+-Python 3.7+
 You must have Python 3.7 or later to install the Sevco Shell
 Check your installed python version by running
 ```
 python --version
 ```
-
-# Configuraion
-Credentials will be pulled from cli args (--api-host, --api-key), environment vars (SVSH\_API\_HOST, SVSH\_AUTH\_TOKEN),
-and ~/.sevco/credentials in that order.
-
-Example ~/.sevco/credentials
+- Python3 setuptools: pip
+Check if pip is installed by running
 ```
-[default]
-api_host = "https://dev.api.sevcolabs.com"
-auth_token = "Bearer abcd1234"
+pip3 --version
 ```
 
 # Installation
 
-Sevco Shell uses Python setuptools for packaging.  You can install using pip.
+Sevco Shell uses Python setuptools for packaging. 
 
-From the source root
+You can install using pip3 From the source root:
 ```
-pip install .
+pip3 install .
 ```
 
 # Execution
 
 Run `svsh` from the install directory or include the installation bin directory your $PATH
 
-At run, the Sevco shell will ask you to provide your credential details:
-Authorization Token can be retrieved from my.sevcolabs.com/profile
+On first run, the Sevco shell will ask you to provide your credential details (api_host,auth_token):
+The authorization token can be retrieved from my.sevcolabs.com/profile
 ```
 api_host = "https://dev.api.sevcolabs.com"
 auth_token = "Bearer sfkjsdfklghsdklfgjhsdfklgjhdfklgjhsdf"
 ```
 
-Credentials can be pass on to the cli (--api-host, --auth-token), set as environment vars (SVSH\_API\_HOST, SVSH\_AUTH\_TOKEN), or defined in ~/.sevco/credentials.
+Credentials are passed on to the cli with:
+
+--api-host, --auth-token
+environment vars (SVSH\_API\_HOST, SVSH\_AUTH\_TOKEN)
+or defined in ~/.sevco/credentials.
+
 The `svsh` reads credentials in the above order.
+
+
+# Credentials File
+
+You can manually edit ~/.sevco/credentials to update your credentials.
+```
+[default]
+api_host = "https://dev.api.sevcolabs.com"
+auth_token = "Bearer abcd1234"
+```
