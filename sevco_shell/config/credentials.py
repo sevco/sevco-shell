@@ -63,7 +63,13 @@ class FileCredentialsProvider(CredentialsProvider):
 
     @staticmethod
     def persist(api_host: Optional[str] = None, auth_token: Optional[str] = None):
-        cred_path = f"{Path.home()}/.sevco/credentials"
+        cred_dir = f"{Path.home()}/.sevco"
+        try:
+            os.makedirs(cred_dir)
+        except FileExistsError:
+            pass
+
+        cred_path = f"{cred_dir}/credentials"
         profile = os.environ.get("SEVCO_PROFILE", "default")
 
         profiles = {profile: {}}
