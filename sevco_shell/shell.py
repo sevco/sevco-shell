@@ -1,4 +1,5 @@
 import cmd
+from . import __version__ as version
 
 import colorama
 import requests
@@ -7,6 +8,7 @@ from sevco_shell.config import CredentialsProviderChain
 from sevco_shell.config.credentials import ApiCredentials
 from sevco_shell.scopes.scope import Scope
 from sevco_shell.scopes.sv import SvScope
+
 
 deep_v_banner = """
           ███████╗          ███████╗ 
@@ -19,8 +21,8 @@ deep_v_banner = """
                      ╚══╝ 
 """
 
-welcome_text = """
-Welcome to the Sevco Shell.
+welcome_text = f"""
+Welcome to the Sevco Shell ({version}).
 
 Type 'help' for available commands.
 """
