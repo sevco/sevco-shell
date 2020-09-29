@@ -32,7 +32,7 @@ def SchemasCmd(config: Config, source: Source):
             return [("Schema", 20)]
 
         def format_thing(self, schemas: SourceSchemas) -> str:
-            return schemas.info.description
+            return schemas.info.description.rjust(20)
 
         @builder.empty_cmd()
         def _do_list(self):
@@ -40,17 +40,15 @@ def SchemasCmd(config: Config, source: Source):
             return self._list()
 
         @builder.cmd(permissions=['admin:schema:read', 'schema:read'])
-        def do_info(self, arg):
+        def do_info(self, idx):
             '''retreive schema details'''
-            idx = self.arg_as_idx(arg)
-            selected: SourceSchemas = self.get_thing_by_index(idx)
+            selected: SourceSchemas = self.get_thing_by_index(self.arg_as_idx(idx))
             pprint(selected.as_dict())
 
         @builder.cmd(permissions=['admin:source:update'])
-        def do_del(self, arg):
+        def do_del(self, idx):
             '''delete source schema'''
-            idx = self.arg_as_idx(arg)
-            selected: SourceSchemas = self.get_thing_by_index(idx)
+            selected: SourceSchemas = self.get_thing_by_index(self.arg_as_idx(idx))
 
             all_schemas = self.schema_client.get(self.source.id)
             updated = [SourceSchemaByName(info=schema.info,

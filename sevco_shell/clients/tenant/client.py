@@ -11,7 +11,7 @@ PLUGIN_URL_ROOT = "/v1/integration/source/plugin"
 
 class TenantClient(SevcoClient):
     def org_list(self) -> List[Organization]:
-        resp = self.api_get("/v1/admin/org")
+        resp = self.api_get("/v1/admin/org", headers={'X-Sevco-Target-Org': '*'})
 
         return [Organization.from_dict(o) for o in json.loads(resp.text)['orgs']]
 
