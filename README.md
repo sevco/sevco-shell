@@ -23,16 +23,11 @@ auth_token = "Bearer abcd1234"
 
 # Installation
 
-Sevco Shell uses Python setuptools for packaging.  You can install using setup.py.
+Sevco Shell uses Python setuptools for packaging.  You can install using pip.
 
-Global install (as root)
+From the source root
 ```
-python setup.py install
-```
-
-Local install
-```
-python setup.py install --user
+pip install .
 ```
 
 # Execution
