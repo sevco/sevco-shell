@@ -206,6 +206,8 @@ class ApiCredentials:
         return self.bearer_token.permissions()
 
     def auth_token_from_user(self) -> BearerToken:
+        import readline  # fix for truncated input on osx
+
         prompt = "Please provide the Sevco API Bearer Token (format: Bearer abcd1234)"
         auth_token = Builder.get_input(prompt, required=False)
 
