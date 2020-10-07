@@ -85,6 +85,9 @@ class SourceConfigBuilder(Builder):
 
             if prop.get('writeOnly', False):
                 v = self.get_password(prompt)
+            elif prop.get('type') == 'boolean':
+                required = field in schema["required"]
+                v = self.get_yes_no(prompt, default_yes=prop.get('default', True))
             else:
                 required = field in schema["required"]
                 v = self.get_input(prompt, required=required)
