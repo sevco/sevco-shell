@@ -1,4 +1,8 @@
 import datetime
+import os
+import platform
+import stat
+from pathlib import Path
 from pprint import pprint
 
 from sevco_shell.builders.builder import Builder
@@ -52,5 +56,33 @@ def RunnersCmd(config: Config):
             selected = self.get_thing_by_index(self.arg_as_idx(idx))
             if Builder.get_yes_no(f"Really delete runner {selected.display_name}?", default_yes=False):
                 self.client.delete(selected.runner_id)
+
+        @builder.cmd(permissions=['admin:runner:download', 'runner:download'])
+        def do_download(self, _arg):
+            '''download runner binary'''
+            default_target = "~/Downloads/runner"
+            current_os = platform.system().lower()
+            runner_os = Builder.get_one_of(
+                "Which platform", ["linux", "windows", "darwin"], default=current_os)
+
+            target = None
+            while target is None:
+                target = Builder.get_input(
+                    f"Save binary to [{default_target}]", required=False) or os.path.expanduser(default_target)
+
+                if os.path.exists(target):
+                    if not Builder.get_yes_no(f"{target} exists. Overwrite?", default_yes=False):
+                        target = None
+
+            runner_binary_bytes = self.client.download(runner_os)
+
+            os.makedirs(os.path.basename(target), exist_ok=True)
+            with open(target, "wb") as f:
+                f.write(runner_binary_bytes)
+
+            p = Path(target)
+            p.chmod(p.stat().st_mode | stat.S_IXUSR)
+
+            print(f"Runner {runner_os} binary saved to: {target}")
 
     return builder.build()(config)

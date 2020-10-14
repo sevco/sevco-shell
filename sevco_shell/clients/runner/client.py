@@ -45,3 +45,8 @@ class RunnerServiceClient(SevcoClient):
         resp = self.api_get(f"/v1/runner/{runner_id}/config")
 
         return RunnerConfig.from_dict(json.loads(resp.text))
+
+    def download(self, runner_os: str) -> bytes:
+        resp = self.api_get(f"/v1/runner/download?os={runner_os}")
+
+        return resp.content

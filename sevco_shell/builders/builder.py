@@ -29,10 +29,11 @@ class Builder:
         return val.lower()[0] == 'y'
 
     @staticmethod
-    def get_one_of(prompt: str, values=List[str]) -> str:
-        val = input(f"{prompt} ({', '.join(values)}): ")
+    def get_one_of(prompt: str, values=List[str], default=None) -> str:
+        choices = ', '.join([v if v != default else f"[{v}]" for v in values])
+        val = input(f"{prompt} ({choices}): ") or default
         while val not in values:
-            val = input(f"{prompt} ({', '.join(values)}): ")
+            val = input(f"{prompt} ({choices}): ") or default
 
         return val
 
