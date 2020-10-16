@@ -29,13 +29,11 @@ class SourceBuilder(Builder):
         return self
 
     def _from_user(self) -> SourceInput:
-        source_type = self.get_input("Source Type")  # TODO: check format
         display_name = self.get_input("Display Name")
         is_cloud = self.get_yes_no("Cloud")
         is_public = self.get_yes_no("Public")
 
-        return SourceInput(
-            source_type, is_cloud, is_public, display_name)
+        return SourceInput(is_cloud, is_public, display_name)
 
     def build(self) -> Optional[Source]:
         if self.source_input:
