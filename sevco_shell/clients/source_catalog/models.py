@@ -6,7 +6,7 @@ from typing import Optional
 
 @dataclass
 class SourceInput(with_dict):
-    source_type: str
+    id: str
     is_cloud: bool
     is_public: bool
     display_name: str
@@ -16,7 +16,6 @@ class SourceInput(with_dict):
 @dataclass
 class Source(with_dict):
     id: str
-    source_type: str
     is_cloud: bool
     owner: str
     is_public: bool
@@ -26,7 +25,7 @@ class Source(with_dict):
     icon: Optional[str]=None
 
     def to_input(self) -> SourceInput:
-        return SourceInput(source_type=self.source_type,
+        return SourceInput(id=self.id,
                            is_cloud=self.is_cloud,
                            is_public=self.is_public,
                            display_name=self.display_name,
