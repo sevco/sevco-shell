@@ -87,7 +87,6 @@ class with_dict:
             raise MissingRequiredFieldsError.from_dacite_error(e)
         except UnexpectedDataError as e:
             raise UnexpectedFieldError.from_dacite_error(e)
-        
 
     def as_dict(self, convert_datetime=True) -> Dict[str, Any]:
         return asdict(self, dict_factory=partial(_custom_dict_factory, convert_datetime))

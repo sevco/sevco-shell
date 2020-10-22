@@ -34,10 +34,10 @@ def RunnersCmd(config: Config):
                           key=lambda x: x.last_checkin_time or epoch, reverse=True)
 
         def things_header(self):
-            return [("Name", 20), ("Last Checkin", 40)]
+            return [("Name", 26), ("Last Checkin", 40)]
 
         def format_thing(self, runner: Runner) -> str:
-            return f"{runner.display_name.rjust(20)} {str(runner.last_checkin_time).rjust(40)}"
+            return f"{runner.display_name.rjust(26)} {str(runner.last_checkin_time).rjust(40)}"
 
         @builder.empty_cmd()
         def _do_list(self):

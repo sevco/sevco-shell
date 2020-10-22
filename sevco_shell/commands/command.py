@@ -14,14 +14,20 @@ class Command(cmd.Cmd):
 class CommandWithList(Command):
     def __init__(self):
         super().__init__()
-        self.things = []
+        self._things = None
+
+    @property
+    def things(self) -> List[Any]:
+        if self._things is None:
+            self._things = self.get_things()
+
+        return self._things
 
     def emptyline(self):
         self._do_list()
 
     def _list(self):
         print()
-        self.things = self.get_things()
         idx_width = len(f"[{len(self.things)}]")
 
         header = ''.rjust(idx_width)

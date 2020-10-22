@@ -61,7 +61,7 @@ class TenantClient(SevcoClient):
 
         return f"{d['token_type']} {d['access_token']}"
 
-    def auth_token(self, org_id: str) -> str:
+    def svc_token(self, org_id: str) -> str:
         resp = self.api_get(f"/v1/admin/org/{org_id}/apikey")
 
         return json.loads(resp.text)['apiKey']

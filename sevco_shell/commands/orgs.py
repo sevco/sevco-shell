@@ -75,4 +75,13 @@ def OrgsCmd(credentials: ApiCredentials):
                 self.client.org_delete(selected.id)
                 print(f"Deleted {selected.org_name}")
 
+        @builder.cmd(permissions=['admin:orgs:account', 'orgs:account'])
+        def do_token(self, idx):
+            '''get service account token for [idx]'''
+            selected: Organization = self.get_thing_by_index(
+                self.arg_as_idx(idx))
+            assert selected.id
+
+            print(self.client.svc_token(selected.id))
+
     return builder.build()(credentials)
