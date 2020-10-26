@@ -80,9 +80,9 @@ class with_dict:
             type_hooks[datetime] = parse_datetime
 
         try:
-            return dacite.from_dict(data_class=cls, data=obj, config=dacite.config.Config(strict=True,  # type: ignore
-                                                                                        cast=[Enum],
-                                                                                        type_hooks=type_hooks))
+            return dacite.from_dict(data_class=cls, data=obj, config=dacite.config.Config(strict=False,  # type: ignore
+                                                                                          cast=[Enum],
+                                                                                          type_hooks=type_hooks))
         except MissingValueError as e:
             raise MissingRequiredFieldsError.from_dacite_error(e)
         except UnexpectedDataError as e:
