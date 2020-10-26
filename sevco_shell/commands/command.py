@@ -23,11 +23,17 @@ class CommandWithList(Command):
 
         return self._things
 
+    def _clear_list(self):
+        self._things = None
+
     def emptyline(self):
         self._do_list()
 
     def _list(self):
+        self._clear_list()
+
         print()
+
         idx_width = len(f"[{len(self.things)}]")
 
         header = ''.rjust(idx_width)

@@ -1,3 +1,4 @@
+from sevco_shell.clients.scheduler.client import SchedulerServiceClient
 from typing import Union
 
 from sevco_shell.builders.source import (SourceBuilder, SourceScheduleBuilder,
@@ -25,6 +26,8 @@ def SourcesCmd(config: Config) -> CommandWithList:
 
             self.client = SourceCatalogClient(
                 api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
+            self.scheduler_client = SchedulerServiceClient(
+                api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
 
         def default(self, line: str) -> Union[bool, CmdResponse]:
             try:
@@ -42,10 +45,10 @@ def SourcesCmd(config: Config) -> CommandWithList:
             return self.client.list()
 
         def things_header(self):
-            return [("Source", 20)]
+            return [("Source", 40)]
 
         def format_thing(self, source: Source) -> str:
-            return source.display_name.rjust(20)
+            return source.display_name.rjust(40)
 
         @builder.empty_cmd()
         def _do_list(self):
@@ -64,7 +67,12 @@ def SourcesCmd(config: Config) -> CommandWithList:
             '''configure source [idx]'''
             selected: Source = self.get_thing_by_index(self.arg_as_idx(idx))
 
-            SourceConfigBuilder(self.config, selected.id).from_user().build()
+            source_config = SourceConfigBuilder(self.config, selected.id).from_user().build()
+            if source_config:
+                try:
+                    self.scheduler_client.execute(source_config_id=source_config.id)
+                except Exception as e:
+                    print(f"Unable to schedule immediate execution: {e}")
 
         @builder.cmd(permissions=['admin:source:create'])
         def do_add(self, _arg):

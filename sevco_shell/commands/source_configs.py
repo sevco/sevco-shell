@@ -41,11 +41,11 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
             return sorted(self.client.list(source_id=self.source.id if self.source else None), key=get_timestamp, reverse=True)
 
         def things_header(self):
-            return [("ID", 36), ("Source", 20)]
+            return [("ID", 36), ("Source", 40)]
 
         def format_thing(self, config: SourceConfig) -> str:
             source = self.sources_by_id.get(config.source_id)
-            return f"{config.id.rjust(36)} {source.display_name.rjust(20) if source else 'UNKNOWN'.rjust(20)}"
+            return f"{config.id.rjust(36)} {source.display_name.rjust(40) if source else 'UNKNOWN'.rjust(40)}"
 
         @builder.empty_cmd()
         def _do_list(self):
