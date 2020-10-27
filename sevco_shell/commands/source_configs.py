@@ -3,6 +3,7 @@ from pprint import pprint
 from typing import Dict, Optional
 
 from sevco_shell.builders.builder import Builder
+from sevco_shell.clients.scheduler.client import SchedulerServiceClient
 from sevco_shell.clients.source_audit.client import SourceAuditClient
 from sevco_shell.clients.source_catalog.client import SourceCatalogClient
 from sevco_shell.clients.source_catalog.models import Source
@@ -26,6 +27,8 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
 
             self.source = source
             self.client = SourceConfigClient(
+                api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
+            self.scheduler_client = SchedulerServiceClient(
                 api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
 
             catalog_client = SourceCatalogClient(
@@ -82,7 +85,7 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
                 self.arg_as_idx(idx))
             assert selected.id
 
-            if selected.auth.schema != 'oauth2':
+            if selected.auth and selected.auth.schema != 'oauth2':
                 raise Exception("Not an OAuth2 config")
 
             client = SourceOAuthClient(
@@ -102,5 +105,16 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
             if Builder.get_yes_no(f"Really delete {selected.id}?", default_yes=False):
                 self.client.delete(selected.id)
                 print(f"Deleted {selected.id}")
+
+        @builder.cmd(permissions=['admin:source:schedule:execute'])
+        def do_exec(self, idx):
+            '''execute config [idx]'''
+            selected: SourceConfig = self.get_thing_by_index(
+                self.arg_as_idx(idx))
+            assert selected.id
+
+            self.scheduler_client.execute(source_config_id=selected.id)
+
+
 
     return builder.build()(config, source)
