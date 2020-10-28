@@ -1,3 +1,4 @@
+from sevco_shell.clients.source_oauth.client import SourceOAuthClient
 from sevco_shell.clients.scheduler.client import SchedulerServiceClient
 from typing import Union
 
@@ -28,6 +29,9 @@ def SourcesCmd(config: Config) -> CommandWithList:
                 api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
             self.scheduler_client = SchedulerServiceClient(
                 api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
+            self.oauth_client = SourceOAuthClient(
+                api_host=self.config.credentials.api_host, auth_token=self.config.credentials.auth_token, target_org=self.config.org.id)
+
 
         def default(self, line: str) -> Union[bool, CmdResponse]:
             try:
@@ -66,9 +70,16 @@ def SourcesCmd(config: Config) -> CommandWithList:
         def do_config(self, idx):
             '''configure source [idx]'''
             selected: Source = self.get_thing_by_index(self.arg_as_idx(idx))
-
-            source_config = SourceConfigBuilder(self.config, selected.id).from_user().build()
+            builder = source_config = SourceConfigBuilder(self.config, selected.id)
+            source_config = builder.from_user().build()
             if source_config:
+                assert source_config.id
+
+                if builder.schema.auth['title'] == 'oauth2':
+                    url = self.oauth_client.initiate(source_config_id=source_config.id)
+                    print("Browse to the following URL to initiate the OAuth workflow:")
+                    print(url)
+
                 try:
                     self.scheduler_client.execute(source_config_id=source_config.id)
                 except Exception as e:

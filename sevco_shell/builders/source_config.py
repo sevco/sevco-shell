@@ -16,6 +16,7 @@ class SourceConfigBuilder(Builder):
             api_host=config.credentials.api_host, auth_token=config.credentials.auth_token, target_org=config.org.id)
         self.source_id = source_id
         self.config = None
+        self.schema = None
 
     def from_user(self) -> 'SourceConfigBuilder':
         try:
@@ -37,18 +38,18 @@ class SourceConfigBuilder(Builder):
             schema_desc = self.get_one_of(
                 "Choose schema", [schema.info.description for schema in schemas])
 
-        schema = next(
+        self.schema = next(
             iter(schema for schema in schemas if schema.info.description == schema_desc))
 
-        print(f"Configuration: {schema.info.description}")
+        print(f"Configuration: {self.schema.info.description}")
 
-        connect_config = self._collect_config(schema.connect)
-        auth_config = self._collect_config(schema.auth)
-        settings_config = self._collect_config(schema.settings)
+        connect_config = self._collect_config(self.schema.connect)
+        auth_config = self._collect_config(self.schema.auth)
+        settings_config = self._collect_config(self.schema.settings)
 
         runner_id = None
-        if schema.info.runner_requirements.configurable:
-            if schema.info.runner_requirements.required:
+        if self.schema.info.runner_requirements.configurable:
+            if self.schema.info.runner_requirements.required:
                 runner_id = input("Runner ID (required): ")
                 while runner_id == "":
                     runner_id = input("Runner ID (required): ")

@@ -77,7 +77,7 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
             for audit in client.list("execution", source_config_id=selected.id, per_page=10):
                 pprint(audit.as_dict())
 
-        @builder.cmd(permissions=['admin:source:oauth:read', 'source:oauth:read'])
+        @builder.cmd(permissions=['admin:source:config:write', 'source:config:write'])
         def do_oauth(self, idx):
             '''initiate OAuth2 workflow for config [idx]'''
 
@@ -92,7 +92,7 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
                 api_host=self.config.credentials.api_host, auth_token=self.config.credentials.auth_token, target_org=self.config.org.id)
 
             url = client.initiate(source_config_id=selected.id)
-            print("Browse to the following to initiate the OAuth workflow:")
+            print("Browse to the following URL to initiate the OAuth workflow:")
             print(url)
 
         @builder.cmd(permissions=['admin:source:config:delete', 'source:config:delete'])

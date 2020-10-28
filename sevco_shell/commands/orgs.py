@@ -1,4 +1,5 @@
 from typing import Union
+from pprint import pprint
 
 from sevco_shell.builders.builder import Builder
 from sevco_shell.builders.tenant import OrgBuilder
@@ -83,5 +84,11 @@ def OrgsCmd(credentials: ApiCredentials):
             assert selected.id
 
             print(self.client.svc_token(selected.id))
+
+        @builder.cmd(permissions=['admin:orgs:read', 'orgs:my:read'])
+        def do_info(self, idx: int):
+            '''retrieve organization details'''
+            selected = self.get_thing_by_index(self.arg_as_idx(idx))
+            pprint(selected.as_dict())
 
     return builder.build()(credentials)
