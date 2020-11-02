@@ -1,16 +1,22 @@
 from getpass import getpass
-from typing import List
+from typing import Callable, List
 
 
 class Builder:
     @staticmethod
-    def get_input(prompt: str, required: bool = True) -> str:
-        if required:
-            prompt = f"{prompt} (required)"
+    def get_input(prompt: str, required: bool = True, validator: Callable = lambda x: True, invalid_message: str = '') -> str:
+        while True:
+            if required:
+                prompt = f"{prompt} (required)"
 
-        val = input(f"{prompt}: ")
-        while val == "" and required:
             val = input(f"{prompt}: ")
+            while (val == "" and required):
+                val = input(f"{prompt}: ")
+
+            if not validator(val):
+                print(invalid_message)
+            else:
+                break
 
         return val
 

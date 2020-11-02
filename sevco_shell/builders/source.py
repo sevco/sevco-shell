@@ -29,13 +29,22 @@ class SourceBuilder(Builder):
         return self
 
     def _from_user(self) -> SourceInput:
-        source_type = self.get_input("Source Type")  # TODO: check format
+        def is_valid_id(x: str) -> bool:
+            if len(x) > 32:
+                return False
+
+            for c in x:
+                if not c.isalnum() or c == '-':
+                    return False
+
+            return True
+
+        id = self.get_input("ID", True, is_valid_id, "ID must be no more than 32 characters in kebab case")
         display_name = self.get_input("Display Name")
         is_cloud = self.get_yes_no("Cloud")
         is_public = self.get_yes_no("Public")
 
-        return SourceInput(
-            source_type, is_cloud, is_public, display_name)
+        return SourceInput(id, is_cloud, is_public, display_name)
 
     def build(self) -> Optional[Source]:
         if self.source_input:
@@ -101,8 +110,7 @@ class SourceSchemaBuilder(Builder):
                                           settings=schema.settings['title']) for schema in all_schemas]
             by_name.append(self.schemas)
 
-            schemas = self.client.add(
-                self.source_id, source_schemas=SourceSchemaByNameArray(types=by_name))
+            self.client.add(self.source_id, source_schemas=SourceSchemaByNameArray(types=by_name))
             print("Schemas added")
 
             return self.schemas
