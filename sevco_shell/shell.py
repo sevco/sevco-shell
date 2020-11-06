@@ -21,8 +21,10 @@ deep_v_banner = """
                      ╚══╝ 
 """
 
-welcome_text = f"""
+def gen_welcome_text(version, api_host):
+    return f"""
 Welcome to the Sevco Shell ({version}).
+Connected to {api_host}.
 
 Type 'help' for available commands.
 """
@@ -30,11 +32,11 @@ Type 'help' for available commands.
 
 class Shell(cmd.Cmd):
     banner = f"{colorama.Fore.RED}{deep_v_banner}{colorama.Style.RESET_ALL}"
-    intro = f"{colorama.Fore.RED}{welcome_text}{colorama.Style.RESET_ALL}"
 
     def __init__(self, credentials: ApiCredentials):
         super().__init__()
         self.credentials = credentials
+        self.intro = gen_welcome_text(version, credentials.api_host)
         colorama.init()
 
     def print_banner(self):
