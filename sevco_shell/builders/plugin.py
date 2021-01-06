@@ -38,12 +38,14 @@ class PluginBuilder(Builder):
         os = OperatingSystem(OperatingSystemFiendlyName(self.get_one_of(
             "OS", OperatingSystemFiendlyName.keys())).name)
         enabled = self.get_yes_no("Enabled")
+        default = self.get_yes_no("Make default")
         binary_url = self.get_input("Binary URL")
 
         return PluginInput(source_id=self.source_id,
                            display_version=display_version,
                            os=os,
                            enabled=enabled,
+                           default=default,
                            binary_url=binary_url)
 
     def build(self) -> Optional[Plugin]:

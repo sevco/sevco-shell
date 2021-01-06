@@ -10,6 +10,7 @@ class PluginInput(with_dict):
     source_id: str
     os: OperatingSystem
     enabled: bool
+    default: bool
     display_version: Optional[str] = ""
     release_notes: Optional[str] = ""
     binary_url: Optional[str] = None

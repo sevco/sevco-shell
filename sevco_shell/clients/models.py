@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from dacite.exceptions import MissingValueError, UnexpectedDataError
 
 import dateutil.parser
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Type, TypeVar, Union
 
 from enum import Enum
 
@@ -72,9 +72,11 @@ def parse_datetime(d):
     return dateutil.parser.isoparse(d)
 
 
+T = TypeVar('T')
+
 class with_dict:
     @classmethod
-    def from_dict(cls, obj: Dict[str, Any], convert_datetime=True):
+    def from_dict(cls: Type[T], obj: Dict[str, Any], convert_datetime: bool=True) -> T:
         type_hooks = {}
         if convert_datetime:
             type_hooks[datetime] = parse_datetime

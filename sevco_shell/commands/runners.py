@@ -60,10 +60,11 @@ def RunnersCmd(config: Config):
         @builder.cmd(permissions=['admin:runner:download', 'runner:download'])
         def do_download(self, _arg):
             '''download runner binary'''
-            default_target = "~/Downloads/runner"
             current_os = platform.system().lower()
             runner_os = Builder.get_one_of(
                 "Which platform", ["linux", "windows", "darwin"], default=current_os)
+
+            default_target = "~/Downloads/runner.exe" if runner_os == "windows" else "~/Downloads/runner"
 
             target = None
             while target is None:
