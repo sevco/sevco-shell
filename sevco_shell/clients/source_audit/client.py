@@ -2,17 +2,15 @@ import json
 import logging
 from typing import List, Optional
 
-import requests
-
 from sevco_shell.clients.client import SevcoClient
-from sevco_shell.clients.source_audit.model import (PageinatedResponse,
-                                                    SourceExecution)
+from sevco_shell.clients.source_audit.model import (PageinatedResponseV2,
+                                                    SourceExecutionV2)
 
 LOG = logging.getLogger(__name__)
 
 
 class SourceAuditClient(SevcoClient):
-    def list(self, audit_type: str, per_page: int = 100, page: int = 1, source_config_id: Optional[str] = None, execution_id: Optional[str] = None) -> List[SourceExecution]:
+    def list(self, audit_type: str, per_page: int = 100, page: int = 1, source_config_id: Optional[str] = None, execution_id: Optional[str] = None) -> List[SourceExecutionV2]:
         params = {
             "type": audit_type,
             "per_page": per_page,
@@ -23,20 +21,20 @@ class SourceAuditClient(SevcoClient):
         if source_config_id:
             params['source_config_id'] = source_config_id
 
-        resp = self.api_get("/v1/audit/source", params=params)
+        resp = self.api_get("/v2/audit/source", params=params)
 
-        paginated: PageinatedResponse = PageinatedResponse.from_dict(
+        paginated: PageinatedResponseV2 = PageinatedResponseV2.from_dict(
             json.loads(resp.text))
 
         return paginated.items
 
-    def add(self, source_execution: SourceExecution) -> SourceExecution:
-        resp = self.api_post(f"/v1/audit/source",
+    def add(self, source_execution: SourceExecutionV2) -> SourceExecutionV2:
+        resp = self.api_post(f"/v2/audit/source",
                              data=json.dumps(source_execution.as_dict()))
 
-        return SourceExecution.from_dict(json.loads(resp.text))
+        return SourceExecutionV2.from_dict(json.loads(resp.text))
 
     def delete(self, audit_type: str, execution_id: str) -> None:
-        resp = self.api_delete(f"/v1/audit/source",
+        resp = self.api_delete(f"/v2/audit/source",
                                params={"type": audit_type,
                                        "execution_id": execution_id})

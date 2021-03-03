@@ -92,6 +92,8 @@ class SourceConfigBuilder(Builder):
             else:
                 required = field in schema["required"]
                 v = self.get_input(prompt, required=required)
+                if prop.get('type') == 'integer':
+                    v = int(v)
 
             config[field] = v
 

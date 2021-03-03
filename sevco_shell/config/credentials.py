@@ -137,8 +137,8 @@ class BearerToken:
             if time.time() > decoded['exp']:
                 print("Token is expired")
                 return False
-        except:
-            print("Unable to decode API Token")
+        except Exception as e:
+            print(f"Unable to decode API Token: {e}")
             return False
 
         return True

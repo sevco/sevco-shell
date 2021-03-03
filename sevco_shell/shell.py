@@ -59,7 +59,7 @@ class Shell(cmd.Cmd):
             except KeyboardInterrupt:
                 print()
             except requests.exceptions.HTTPError as e:
-                print(f"Error: {str(e)}")
+                print(f"Error: {str(e)}: {e.response.text}")
                 if e.response.status_code == 403:
                     print("Please verify API host and API key")
             except Exception as e:

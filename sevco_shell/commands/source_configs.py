@@ -65,8 +65,12 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
             pprint(selected.as_dict())
 
         @builder.cmd(permissions=['admin:source:audit:read', 'source:audit:read'])
-        def do_audit(self, idx):
-            '''retrieve last 10 execution audit logs for config [idx]'''
+        def do_audit(self, idx_n):
+            '''retrieve last N execution audit logs for config [idx]'''
+
+            idx, _, n = idx_n.partition(' ')
+
+            n = int(n) if n else 10
 
             selected: SourceConfig = self.get_thing_by_index(
                 self.arg_as_idx(idx))
@@ -74,7 +78,7 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
             client = SourceAuditClient(
                 api_host=self.config.credentials.api_host, auth_token=self.config.credentials.auth_token, target_org=self.config.org.id)
 
-            for audit in client.list("execution", source_config_id=selected.id, per_page=10):
+            for audit in client.list("execution", source_config_id=selected.id, per_page=n):
                 pprint(audit.as_dict())
 
         @builder.cmd(permissions=['admin:source:config:write', 'source:config:write'])
@@ -113,8 +117,6 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
                 self.arg_as_idx(idx))
             assert selected.id
 
-            self.scheduler_client.execute(source_config_id=selected.id)
-
-
+            print(self.scheduler_client.execute(source_config_id=selected.id))
 
     return builder.build()(config, source)
