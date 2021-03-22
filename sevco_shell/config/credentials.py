@@ -118,7 +118,12 @@ class BearerToken:
         return jwt.decode(self.token[7:], verify=False)
 
     def permissions(self) -> List[str]:
-        return self.jwt()['permissions']
+        permissions = self.jwt().get('permissions', [])
+
+        for r in self.jwt().get('https://sevco/props/permsByRole', []):
+            permissions.extend(r['permissions'])
+
+        return permissions
 
     def expired(self) -> bool:
         return time.time() > self.jwt()['exp'] + (5 * 60)
