@@ -37,7 +37,10 @@ def RunnersCmd(config: Config):
             return [("Name", 26), ("Last Checkin", 40)]
 
         def format_thing(self, runner: Runner) -> str:
-            return f"{runner.display_name.rjust(26)} {str(runner.last_checkin_time).rjust(40)}"
+            if runner.display_name:
+                return f"{runner.display_name.rjust(26)} {str(runner.last_checkin_time).rjust(40)}"
+            else:
+                return f"{runner.hostname.rjust(26)} {str(runner.last_checkin_time).rjust(40)}"
 
         @builder.empty_cmd()
         def _do_list(self):

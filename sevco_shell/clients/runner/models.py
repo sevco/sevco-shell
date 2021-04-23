@@ -16,6 +16,7 @@ class Runner(with_dict):
     os: OperatingSystem
     runner_id: str = field(default_factory=get_uuid)
     version: Optional[str] = field(default=None)
+    hostname: Optional[str] = field(default=None)
     display_name: Optional[str] = field(default=None)
     registration_time: datetime = field(default_factory=datetime.utcnow)
     last_checkin_time: Optional[datetime] = field(default=None)
