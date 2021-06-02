@@ -10,7 +10,7 @@ LOG = logging.getLogger(__name__)
 
 
 class SourceAuditClient(SevcoClient):
-    def list(self, audit_type: str, per_page: int = 100, page: int = 1, source_config_id: Optional[str] = None, execution_id: Optional[str] = None) -> List[SourceExecutionV2]:
+    def list(self, audit_type: str, per_page: int = 100, page: int = 0, source_config_id: Optional[str] = None, execution_id: Optional[str] = None) -> List[SourceExecutionV2]:
         params = {
             "type": audit_type,
             "per_page": per_page,
