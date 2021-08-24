@@ -38,13 +38,15 @@ def OrgsCmd(credentials: ApiCredentials):
             return super().default(line)
 
         def things_header(self):
-            return [("Org", 16)]
+            return [("Org", 32), ("Id", 40)]
+
 
         def get_things(self):
             return sorted(self.client.org_list(), key=lambda x: x.org_name)
 
         def format_thing(self, org: Organization) -> str:
-            return org.org_name.rjust(16)
+            return f"{org.org_name.rjust(32)} {org.id.rjust(40)}"
+
 
         @builder.empty_cmd()
         def _do_list(self):
