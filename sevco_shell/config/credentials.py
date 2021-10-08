@@ -167,7 +167,7 @@ class ApiToken(AuthToken):
     def permissions(self, api_host: str) -> List[str]:
         if not self._permissions:
             resp = requests.get(
-                f"{api_host}/v1/admin/user/me/apikey/{self.token[6:]}/claims", headers={"Authorization": self.token})
+                f"{api_host}/v1/admin/user/me/apikey/{self.token[6:]}/claims", headers={"Authorization": self.token, "X-Sevco-Target-Org": "*"})
             resp.raise_for_status()
 
             self._permissions = []

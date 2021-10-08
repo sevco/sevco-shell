@@ -79,7 +79,7 @@ def SourceConfigsCmd(config: Config, source: Optional[Source] = None):
                 api_host=self.config.credentials.api_host, auth_token=self.config.credentials.auth_token, target_org=self.config.org.id)
 
             for audit in client.list("execution", source_config_id=selected.id, per_page=n):
-                pprint(audit.as_dict())
+                pprint(audit.as_dict(), width=240)
 
         @builder.cmd(permissions=['admin:source:config:write', 'source:config:write'])
         def do_oauth(self, idx):
