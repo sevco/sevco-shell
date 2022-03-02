@@ -47,7 +47,6 @@ def OrgsCmd(credentials: ApiCredentials):
         def format_thing(self, org: Organization) -> str:
             return f"{org.org_name.rjust(32)} {org.id.rjust(40)}"
 
-
         @builder.empty_cmd()
         def _do_list(self):
             '''list available orgs'''
@@ -92,5 +91,16 @@ def OrgsCmd(credentials: ApiCredentials):
             '''retrieve organization details'''
             selected = self.get_thing_by_index(self.arg_as_idx(idx))
             pprint(selected.as_dict())
+
+        @builder.cmd(permissions=['admin:orgs:read', 'orgs:my:read'])
+        def do_id(self, id: str) -> Union[bool, CmdResponse]:
+            '''change scope into org id [id]'''
+
+            for org in self.things:
+                if org.id == id:
+                    return NewScopeResponse(OrgScope(Config(credentials=self.credentials, org=org)))
+
+            print(f"Unknown org id: {id}")
+            return False
 
     return builder.build()(credentials)
