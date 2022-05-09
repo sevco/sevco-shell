@@ -112,9 +112,16 @@ class CredentialsProviderChain(CredentialsProvider):
 class AuthToken:
     def __init__(self, token: str):
         self.token = token
+        self._permissions = []
 
     def permissions(self, api_host: str) -> List[str]:
-        raise NotImplementedError
+        if not self._permissions:
+            resp = requests.get(f"{api_host}/v1/admin/user/token?includePermsByRole=true",
+                                headers={"Authorization": self.token, "X-Sevco-Target-Org": "*"})
+            resp.raise_for_status()
+            for role in resp.json()["https://sevco/props/permsByRole"]:
+                self._permissions.extend(role["permissions"])
+        return self._permissions
 
     def expired(self) -> bool:
         raise NotImplementedError
@@ -125,19 +132,11 @@ class AuthToken:
 
 class BearerToken(AuthToken):
     def __init__(self, token: str):
-        self.token = token
+        super().__init__(token)
 
     def _jwt(self):
         # Slice out the 'Bearer ' prefix
         return jwt.decode(self.token[7:], verify=False)
-
-    def permissions(self, api_host: str) -> List[str]:
-        permissions = self._jwt().get('permissions', [])
-
-        for r in self._jwt().get('https://sevco/props/permsByRole', []):
-            permissions.extend(r['permissions'])
-
-        return permissions
 
     def expired(self) -> bool:
         return time.time() > self._jwt()['exp'] + (5 * 60)
@@ -161,21 +160,7 @@ class BearerToken(AuthToken):
 
 class ApiToken(AuthToken):
     def __init__(self, token: str):
-        self.token = token
-        self._permissions: List[str] = []
-
-    def permissions(self, api_host: str) -> List[str]:
-        if not self._permissions:
-            resp = requests.get(
-                f"{api_host}/v1/admin/user/me/apikey/{self.token[6:]}/claims", headers={"Authorization": self.token, "X-Sevco-Target-Org": "*"})
-            resp.raise_for_status()
-
-            self._permissions = []
-
-            for r in resp.json().get('claims', {}).get('https://sevco/props/permsByRole', []):
-                self._permissions.extend(r['permissions'])
-
-        return self._permissions
+        super().__init__(token)
 
     def expired(self) -> bool:
         return False
