@@ -23,7 +23,7 @@ class TenantClient(SevcoClient):
 
     def org_delete(self, org_id: str) -> None:
         resp = self.api_delete(
-            "/v1/admin/org", data=json.dumps({"id": org_id}))
+            "/v1/admin/org", data=json.dumps({"id": org_id}), headers={"X-Sevco-Target-Org": org_id})
 
     def list_users(self) -> List[User]:
         resp = self.api_get("/v1/admin/user")
