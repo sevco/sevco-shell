@@ -49,7 +49,7 @@ The `svsh` reads credentials in the above order.
 You can manually edit ~/.sevco/credentials to update your credentials.
 ```
 [default]
-api_host = "https://dev.api.sevcolabs.com"
+api_host = "https://api.sev.co"
 auth_token = "Bearer abcd1234"
 ```
 
