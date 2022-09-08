@@ -31,7 +31,7 @@ Run `svsh` from the install directory or include the installation bin directory 
 On first run, the Sevco shell will ask you to provide your credential details (api_host,auth_token):
 The authorization token can be retrieved from my.sevcolabs.com/profile
 ```
-api_host = "https://dev.api.sevcolabs.com"
+api_host = "https://api.sev.co"
 auth_token = "Bearer sfkjsdfklghsdklfgjhsdfklgjhdfklgjhsdf"
 ```
 
@@ -49,7 +49,7 @@ The `svsh` reads credentials in the above order.
 You can manually edit ~/.sevco/credentials to update your credentials.
 ```
 [default]
-api_host = "https://dev.api.sevcolabs.com"
+api_host = "https://api.sev.co"
 auth_token = "Bearer abcd1234"
 ```
 
